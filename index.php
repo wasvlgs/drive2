@@ -2,7 +2,14 @@
 
     require_once 'database.php';
 
-    
+    session_start();
+    $getID;
+
+    if(isset($_SESSION['id']) && !empty($_SESSION['id'])){
+        $getID = $_SESSION['id'];
+    }else{
+        $getID = '';
+    }
 
 
 ?>
@@ -37,7 +44,15 @@
                 <a href="#features" class="text-gray-700 hover:text-blue-600 transition">Features</a>
                 <a href="#contact" class="text-gray-700 hover:text-blue-600 transition">Contact</a>
             </nav>
-            <a href="login/login.php" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">Login</a>
+            <?php
+                if(!empty($getID) && isset($_SESSION['role']) && $_SESSION['role'] === "admin"){
+                    echo '<a href="admin/dashboard.php" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">Dashboard</a>';
+                }else if(!empty($getID)){
+                    echo '<a href="pages/dashboard.php" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">Dashboard</a>';
+                }else{
+                    echo '<a href="login/login.php" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">Login</a>';
+                }
+            ?>
         </div>
     </header>
 

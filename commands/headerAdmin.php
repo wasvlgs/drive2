@@ -49,7 +49,12 @@
             <!-- Greeting -->
             <div class="text-xl font-semibold">Welcome to control section, <?php echo $getName; ?>!</div>
             <!-- Logout Link -->
-            <form method="post"><button name="logout" href="logout.html" class="text-white hover:text-blue-300">🚪 Logout</button></form>
+            <form method="post" class="flex gap-5">
+                
+            <a href="../index.php" class=" hover:text-blue-300 transition-all duration-200">Home</a>
+            <a href="../social/blog.php" class=" hover:text-blue-300 transition-all duration-200">Blog</a>
+            <button name="logout" href="logout.html" class="text-white hover:text-blue-300">🚪 Logout</button>
+        </form>
         </div>
     </header>
 

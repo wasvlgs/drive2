@@ -88,10 +88,12 @@
                 <a href="../../index.php#contact" class="text-gray-700 hover:text-blue-600 transition">Contact</a>
             </nav>
             <?php
-                if(!empty($getID)){
-                    echo '<a href="../pages/dashboard.php" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">Dashboard</a>';
+                if(!empty($getID) && isset($_SESSION['role']) && $_SESSION['role'] === "admin"){
+                    echo '<a href="../../admin/dashboard.php" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">Dashboard</a>';
+                }else if(!empty($getID)){
+                    echo '<a href="../../pages/dashboard.php" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">Dashboard</a>';
                 }else{
-                    echo '<a href="../login/login.php" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">Login</a>';
+                    echo '<a href="../../login/login.php" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">Login</a>';
                 }
             ?>
         </div>

@@ -52,7 +52,10 @@
                 }
              ?>!</div>
             <!-- Logout Link -->
-            <form method="post"><button name="logout" href="logout.html" class="text-white hover:text-blue-300">🚪 Logout</button></form>
+            <form method="post" class="flex gap-5">
+            <a href="../index.php" class=" hover:text-blue-300 transition-all duration-200">Home</a>
+            <a href="../social/blog.php" class=" hover:text-blue-300 transition-all duration-200">Blog</a>
+            <button name="logout" href="logout.html" class="text-white hover:text-blue-300">🚪 Logout</button></form>
         </div>
     </header>
 
@@ -66,6 +69,7 @@
                     <li><a href="explore.php" class="block hover:text-blue-300">🚗 Explore Vehicles</a></li>
                     <li><a href="reservation.php" class="block hover:text-blue-300">🛣️ My Reservations</a></li>
                     <li><a href="review.php" class="block hover:text-blue-300">📝 My Reviews</a></li>
+                    <li><a href="blog.php" class="block hover:text-blue-300">📝 My Blogs</a></li>
                     <li><a href="setting.php" class="block hover:text-blue-300">⚙️ Account Settings</a></li>
                 </ul>
             </nav>

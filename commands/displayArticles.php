@@ -117,6 +117,45 @@
             }
         }
 
+        public function displayMyArticles($getID){
+            $this->id_client = $getID;
+
+            $getArticles = $this->database->prepare("SELECT * FROM article WHERE id_client = :getID");
+            $getArticles->bindParam(":getID",$this->id_client);
+            if($getArticles->execute()){
+                return $getArticles;
+            }else{
+                return null;
+            }
+        }
+
+        public function editArticle($getID, $getTitre, $getContent){
+            $this->id_article = $getID;
+            $this->titre = $getTitre;
+            $this->content = $getContent;
+
+            $editArticle = $this->database->prepare("UPDATE article SET title = :titre, content = :content WHERE id_article = :article");
+            $editArticle->bindParam(":titre",$this->titre);
+            $editArticle->bindParam(":content",$this->content);
+            $editArticle->bindParam(":article",$this->id_article);
+            if($editArticle->execute()){
+                echo '<script>Location.replace("blog.php")</script>';
+            }else{
+                echo '<script>alert("Error try again!")</script>';
+            }
+        }
+
+        public function removeArticle($getID){
+            $this->id_article = $getID;
+
+            $deleteArticle = $this->database->prepare("DELETE FROM article WHERE id_article = :getID");
+            $deleteArticle->bindParam(":getID",$this->id_article);
+            if($deleteArticle->execute()){
+                echo '<script>Location.replace("blog.php")</script>';
+            }else{
+                echo '<script>alert("Error try again!")</script>';
+            }
+        }
         
 
 
