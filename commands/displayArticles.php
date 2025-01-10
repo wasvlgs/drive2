@@ -10,6 +10,7 @@
 
     class article{
         private $database;
+        private $id_article;
         private $id_client;
         private $id_them;
         private $titre;
@@ -95,8 +96,9 @@
         
 
         public function getArticleDetails($getID){
+            $this->id_article = $getID;
             $getArticle = $this->database->prepare("SELECT * FROM article WHERE id_article = :getID AND is_approved = '1'");
-            $getArticle->bindParam(":getID",$getID);
+            $getArticle->bindParam(":getID",$this->id_article);
             if($getArticle->execute()){
                 return $getArticle->fetch(PDO::FETCH_ASSOC);
             }else{
@@ -104,9 +106,18 @@
             }
         }
 
-        public function getTages(){
-            $getTags = $this->database->prepare("SELECT * FROM tag_article INNER JOIN tag ON tag_article.id_tag = tag.id_tag WHERE id_article");
+        public function getTages($getID){
+            $this->id_article = $getID;
+            $getTags = $this->database->prepare("SELECT * FROM tag_article INNER JOIN tag ON tag_article.id_tag = tag.id_tag WHERE id_article = :getID");
+            $getTags->bindParam(":getID",$this->id_article);
+            if($getTags->execute() && $getTags->rowCount() > 0){
+                return $getTags->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                return [];
+            }
         }
+
+        
 
 
 

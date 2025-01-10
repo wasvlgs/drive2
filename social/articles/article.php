@@ -14,10 +14,14 @@
     $db = $conn->getConnect();
 
     require_once '../../commands/displayArticles.php';
+    require_once '../../commands/comment.php';
     $callFunctions = new article($conn->getConnect());
+    $callComments = new comment($conn->getConnect());
 
     if(isset($_GET['article']) && !empty(htmlspecialchars(trim($_GET['article'])))){
         $getArticle = $callFunctions->getArticleDetails(htmlspecialchars(trim($_GET['article'])));
+        $getTags = $callFunctions->getTages(htmlspecialchars(trim($_GET['article'])));
+        $getComments = $callComments->getComments(htmlspecialchars(trim($_GET['article'])));
         if($getArticle){
             $getImage = $getArticle['imgSrc'];
             $getTitre = $getArticle['title'];
@@ -116,6 +120,17 @@
                     </div>
                 </div> -->
                 <?php
+                    if(isset($getTags) && count($getTags) > 0){
+                        echo '<div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Tags:</h3>
+                    <div class="flex flex-wrap gap-2">';
+                    foreach($getTags as $tag){
+                        echo '<span class="bg-blue-100 text-blue-600 py-1 px-3 rounded-full text-sm">'.$tag['name'].'</span>';
+                    }
+                    echo '</div>
+                </div>';
+                    }
+                    
 
                  ?>
 
@@ -130,7 +145,7 @@
                     
                     <!-- Existing Comments -->
                     <div class="space-y-6" id="comments-section">
-                        <div class="border-b pb-4 flex justify-between items-center">
+                        <!-- <div class="border-b pb-4 flex justify-between items-center">
                             <div>
                                 <p class="text-gray-800"><span class="font-bold">Jane Smith</span> - Great tips for planning a road trip! I especially loved the part about mapping out key stops.</p>
                                 <p class="text-sm text-gray-600">Posted on Jan 7, 2025</p>
@@ -139,7 +154,31 @@
                                 <button class="text-blue-600 hover:underline" onclick="openModal('Jane Smith', 'Great tips for planning a road trip! I especially loved the part about mapping out key stops.')">Modify</button>
                                 <button class="text-red-600 hover:underline" onclick="removeComment(this)">Remove</button>
                             </div>
-                        </div>
+                        </div> -->
+                        <?php
+                            
+                            if(isset($getComments) && $getComments->rowCount() > 0){
+                                foreach($getComments as $comment){
+                                    if(isset($getID) && $comment['id_client'] == $getID){
+                                        $getButtons = '<form method="POST" class="flex space-x-4">
+                                        <button type="button" class="text-blue-600 hover:underline" onclick="openModal(`'.$comment['nom'].'`, `'.$comment['content'].'`,'.$comment['id_comment'].')">Modify</button>
+                                        <button value="'.$comment['id_comment'].'" name="delete" class="text-red-600 hover:underline">Remove</button>
+                                    </form>';
+                                    }else{
+                                        $getButtons = '';
+                                    }
+                                    echo '<div class="border-b pb-4 flex justify-between items-center">
+                                    <div>
+                                        <p class="text-gray-800"><span class="font-bold">'.$comment['nom'].'</span> - '.$comment['content'].'</p>
+                                        <p class="text-sm text-gray-600">Posted on '.$comment['date_create'].'</p>
+                                    </div>
+                                    '.$getButtons.'
+                                </div>';
+                                }
+                            }else{
+                                echo 'No comments exict';
+                            }
+                         ?>
                     </div>
 
                     <!-- Add Comment -->
@@ -147,9 +186,9 @@
                 if(!empty($getID)){
                     echo '<div class="mt-8">
                         <h4 class="text-lg font-semibold text-gray-800 mb-2">Add a Comment:</h4>
-                        <form>
-                            <textarea class="w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none mb-4" placeholder="Write your comment here..." rows="4"></textarea>
-                            <button type="button" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition">Submit</button>
+                        <form method="POST">
+                            <textarea name="content" class="w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none mb-4" placeholder="Write your comment here..." rows="4"></textarea>
+                            <button name="addComment" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition">Submit</button>
                         </form>
                     </div>';
                 }else{
@@ -161,19 +200,55 @@
             </div>
         </div>
     </section>
+        <?php 
+
+            if($_SERVER['REQUEST_METHOD'] === "POST"){
+                if(isset($_POST['addComment']) && isset($_GET['article'])){
+                    $getContent = htmlspecialchars(trim($_POST['content']));
+                    $getUser = $getID;
+                    $getArticle = htmlspecialchars(trim($_GET['article']));
+                    if(!empty($getContent) && !empty($getUser) && !empty($getArticle)){
+                        $callComments->addComment($getContent,$getUser,$getArticle);
+                    }else{
+                        echo '<script>alert("Invalid information!")</script>';
+                    }
+                }
+                if(isset($_POST['editComment']) && isset($_GET['article'])){
+                    $getContent = htmlspecialchars(trim($_POST['newContent']));
+                    $getComment = htmlspecialchars(trim($_POST['editComment']));
+                    if(!empty($getContent) && !empty($getComment)){
+                        $callComments->editComment($getComment,$getContent);
+                    }else{
+                        echo '<script>alert("Invalid information!")</script>';
+                    }
+                }
+                if(isset($_POST['delete']) && isset($_GET['article'])){
+                    $getComment = htmlspecialchars(trim($_POST['delete']));
+                    if(!empty($getComment)){
+                        $callComments->removeComment($getComment);
+                    }else{
+                        echo '<script>alert("Invalid information!")</script>';
+                    }
+                }
+            }
+
+
+
+        ?>
 
     <!-- Modal for Comment Modification -->
     <div id="overlay"></div>
     <div id="comment-modal">
         <h3 class="text-xl font-bold mb-4">Modify Comment</h3>
-        <form id="modify-comment-form">
-            <textarea id="comment-text" class="w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none mb-4" rows="4"></textarea>
+        <form method="POST" id="modify-comment-form">
+            <textarea name="newContent" id="comment-text" class="w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none mb-4" rows="4"></textarea>
             <div class="flex justify-end space-x-4">
                 <button type="button" class="bg-gray-300 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-400 transition" onclick="closeModal()">Cancel</button>
-                <button type="submit" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition">Save</button>
+                <button name="editComment" id="getButton" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition">Save</button>
             </div>
         </form>
     </div>
+
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-6">
@@ -187,10 +262,12 @@
         const overlay = document.getElementById('overlay');
         const modal = document.getElementById('comment-modal');
         const commentText = document.getElementById('comment-text');
+        const getButton = document.getElementById('getButton');
         let currentCommentElement = null;
 
-        function openModal(name, comment) {
+        function openModal(name, comment, id) {
             commentText.value = comment;
+            getButton.value = id;
             modal.style.display = 'block';
             overlay.style.display = 'block';
         }
@@ -205,13 +282,7 @@
             commentElement.remove();
         }
 
-        document.getElementById('modify-comment-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            if (currentCommentElement) {
-                currentCommentElement.textContent = commentText.value;
-            }
-            closeModal();
-        });
+        
     </script>
 </body>
 </html>
