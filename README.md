@@ -48,6 +48,6 @@ Ce projet consiste à créer une plateforme de location de voitures pour l'agenc
 
 ### Links:
 
-link diagramme de class: https://lucid.app/lucidchart/6a58dbdc-0634-4f13-afc5-3dcab901c07e/edit?invitationId=inv_32e96efd-53c1-468e-9128-74ca5e4edf86
+link diagramme de class: https://lucid.app/lucidchart/5c982827-0da6-4ae7-895b-262d0335be80/edit?viewport_loc=-1622%2C-842%2C5120%2C2228%2C0_0&invitationId=inv_500f9587-79ab-4d3f-bfe2-81e33ae0a12e
 
-link diagramme de UML: https://lucid.app/lucidchart/6069ebc8-e969-4a8e-895d-51353e87a0de/edit?invitationId=inv_761d3ccd-4400-47e8-8082-d60d599feed7
+link diagramme de UML: https://lucid.app/lucidchart/3e1f9437-9b67-4c79-830c-4fef96799d1a/edit?viewport_loc=-1439%2C-983%2C5617%2C2444%2C0_0&invitationId=inv_b62d4a9a-0a0d-48fd-b06b-471dbf03aa16
