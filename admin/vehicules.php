@@ -46,41 +46,44 @@
 
     <!-- Add Vehicle Modal -->
     <div id="addVehicleModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 hidden">
-        <div class="bg-white p-6 rounded-lg w-96">
+    <div class="bg-white p-6 rounded-lg w-96 max-h-[95vh] overflow-auto">
             <h3 class="text-2xl font-semibold text-gray-800 mb-4">Add New Vehicle</h3>
             <form method="POST" enctype="multipart/form-data">
-                <div class="mb-4">
-                    <label for="vehicle-image" class="block text-gray-700">Upload Image</label>
-                    <input name="imgVehicle" type="file" id="vehicle-image" class="w-full p-2 border border-gray-300 rounded-md" required>
-                </div>
-                <div class="mb-4">
-                    <label for="vehicle-name" class="block text-gray-700">Vehicle Name</label>
-                    <input name="vehicleName" type="text" id="vehicle-name" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter vehicle name" required>
-                </div>
-                <div class="mb-4">
-                    <label for="vehicle-Modele" class="block text-gray-700">Vehicle Modele</label>
-                    <input name="vehicleModele" type="text" id="vehicle-Modele" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter vehicle Medele" required>
-                </div>
-                <div class="mb-4">
-                    <label for="vehicle-category" class="block text-gray-700">Category</label>
-                    <select name="vehicleCategory" id="vehicle-category" class="w-full p-2 border border-gray-300 rounded-md">
-                        <option value="" disabled selected>   -- Select Categorie --  </option>
-                        <!-- <option value="Not Available">Sport</option> -->
-                         <?php echo $callFunctions->getCategories(); ?>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="vehicle-price" class="block text-gray-700">Price per Day</label>
-                    <input name="vehiclePrice" type="number" id="vehicle-price" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter price" required>
-                </div>
-                <div class="mb-4">
-                    <label for="vehicle-availability" class="block text-gray-700">Availability</label>
-                    <select name="vehicleType" id="vehicle-availability" class="w-full p-2 border border-gray-300 rounded-md">
-                        <option value="1">Available</option>
-                        <option value="0">Not Available</option>
-                    </select>
+                <div id="getForm">
+                    <div class="mb-4">
+                        <label for="vehicle-image" class="block text-gray-700">Upload Image</label>
+                        <input name="imgVehicle[]" type="file" id="vehicle-image" class="w-full p-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="vehicle-name" class="block text-gray-700">Vehicle Name</label>
+                        <input name="vehicleName[]" type="text" id="vehicle-name" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter vehicle name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="vehicle-Modele" class="block text-gray-700">Vehicle Modele</label>
+                        <input name="vehicleModele[]" type="text" id="vehicle-Modele" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter vehicle Medele" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="vehicle-category" class="block text-gray-700">Category</label>
+                        <select name="vehicleCategory[]" id="vehicle-category" class="w-full p-2 border border-gray-300 rounded-md">
+                            <option value="" disabled selected>   -- Select Categorie --  </option>
+                            <!-- <option value="Not Available">Sport</option> -->
+                            <?php echo $callFunctions->getCategories(); ?>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="vehicle-price" class="block text-gray-700">Price per Day</label>
+                        <input name="vehiclePrice[]" type="number" id="vehicle-price" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter price" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="vehicle-availability" class="block text-gray-700">Availability</label>
+                        <select name="vehicleType[]" id="vehicle-availability" class="w-full p-2 border border-gray-300 rounded-md">
+                            <option value="1">Available</option>
+                            <option value="0">Not Available</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="flex justify-end">
+                    <button type="button" onclick="addSection()" class="px-4 py-2 mr-4 bg-gray-400 text-white rounded-md">+</button>
                     <button type="button" onclick="closeAddModal()" class="px-4 py-2 mr-4 bg-gray-400 text-white rounded-md">Cancel</button>
                     <button name="addVehicule" type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">Add Vehicle</button>
                 </div>
@@ -93,20 +96,14 @@
 
         if($_SERVER['REQUEST_METHOD'] === "POST"){
             if(isset($_POST['addVehicule'])){
-                $getVehicleName = htmlspecialchars(trim($_POST['vehicleName']));
-                $getvehicleModele = htmlspecialchars(trim($_POST['vehicleModele']));
-                $getvehicleCategory = htmlspecialchars(trim($_POST['vehicleCategory']));
-                $getvehiclePrice = htmlspecialchars(trim($_POST['vehiclePrice']));
-                $getvehicleType = htmlspecialchars(trim($_POST['vehicleType']));
-                $getType;
+                $getVehicleName = $_POST['vehicleName'];
+                $getvehicleModele = $_POST['vehicleModele'];
+                $getvehicleCategory = $_POST['vehicleCategory'];
+                $getvehiclePrice = $_POST['vehiclePrice'];
+                $getvehicleType = $_POST['vehicleType'];
                 $getImg = $_FILES['imgVehicle'];
-                if(!empty($getVehicleName) && !empty($getvehicleModele) && !empty($getvehicleCategory) && !empty($getvehiclePrice) && ($getvehicleType == "1" || $getvehicleType == "0") && !empty($getImg)){
-                    if($getvehicleType == '1'){
-                        $getType = true;
-                    }else if($getvehicleType == '0'){
-                        $getType = false;
-                    }
-                    $callFunctions->addVehicle($getVehicleName,$getvehicleModele,$getvehicleCategory,$getvehiclePrice,$getType,$getImg);
+                if(!empty($getVehicleName) && !empty($getvehicleModele) && !empty($getvehicleCategory) && !empty($getvehiclePrice) && !empty($getvehicleType) && !empty($getImg)){
+                    $callFunctions->addVehicle($getVehicleName,$getvehicleModele,$getvehicleCategory,$getvehiclePrice,$getvehicleType,$getImg);
                 }else{
                     echo '<script>alert("Ivalid information!")</script>';
                 }
@@ -181,6 +178,42 @@
     </div>
 
     <script>
+
+
+        function addSection(){
+            let getForm = document.getElementById("getForm");
+            getForm.innerHTML += `<div class="mb-4 border-t-2 border-black mt-4 pt-4">
+                        <label for="vehicle-image" class="block text-gray-700">Upload Image</label>
+                        <input name="imgVehicle[]" type="file" id="vehicle-image" class="w-full p-2 border border-gray-300 rounded-md" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="vehicle-name" class="block text-gray-700">Vehicle Name</label>
+                        <input name="vehicleName[]" type="text" id="vehicle-name" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter vehicle name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="vehicle-Modele" class="block text-gray-700">Vehicle Modele</label>
+                        <input name="vehicleModele[]" type="text" id="vehicle-Modele" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter vehicle Medele" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="vehicle-category" class="block text-gray-700">Category</label>
+                        <select name="vehicleCategory[]" id="vehicle-category" class="w-full p-2 border border-gray-300 rounded-md">
+                            <option value="" disabled selected>   -- Select Categorie --  </option>
+                            <!-- <option value="Not Available">Sport</option> -->
+                            <?php echo $callFunctions->getCategories(); ?>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="vehicle-price" class="block text-gray-700">Price per Day</label>
+                        <input name="vehiclePrice[]" type="number" id="vehicle-price" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter price" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="vehicle-availability" class="block text-gray-700">Availability</label>
+                        <select name="vehicleType[]" id="vehicle-availability" class="w-full p-2 border border-gray-300 rounded-md">
+                            <option value="1">Available</option>
+                            <option value="0">Not Available</option>
+                        </select>
+                    </div>`;
+        }
         // Open Add Vehicle Modal
         function openAddModal() {
             document.getElementById('addVehicleModal').classList.remove('hidden');

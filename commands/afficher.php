@@ -31,13 +31,13 @@ class VehiculePagination
         $sql = '';
         $getRows = '';
         if($getFilter){
-            $sql = $this->db->prepare("SELECT * FROM vehicule where id_categorie = :getID  LIMIT :limit OFFSET :offset");
+            $sql = $this->db->prepare("SELECT * FROM vehicule where id_categorie = :getID AND disponibilite = 1  LIMIT :limit OFFSET :offset");
             $sql->bindParam(":getID",$getFilter);
             $getRows = $this->db->prepare("SELECT COUNT(*) AS result FROM vehicule where id_categorie = :getID");
             $getRows->bindParam(":getID",$getFilter);
 
         }else{
-            $sql = $this->db->prepare("SELECT * FROM vehicule LIMIT :limit OFFSET :offset");
+            $sql = $this->db->prepare("SELECT * FROM vehicule WHERE disponibilite = 1 LIMIT :limit OFFSET :offset");
             $getRows = $this->db->prepare("SELECT COUNT(*) AS result FROM vehicule");
         }
         $sql->bindParam(':limit', $limit, PDO::PARAM_INT);

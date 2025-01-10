@@ -20,3 +20,24 @@ ALTER TABLE client ADD CONSTRAINT role FOREIGN KEY (role) REFERENCES role(id_rol
 
 
 INSERT INTO avis(note,commentaire,date_avis,time_avis,id_client,id_vehicule) VALUES(5,"i very like the service",CURRENT_DATE,CURRENT_TIME,2,1)
+
+
+CREATE TABLE article(id_article INT AUTO_INCREMENT PRIMARY KEY NOT NULL, title varchar(550) NOT NULL, content longtext, date_create DATE, id_client int, is_approved boolean, id_them int, FOREIGN KEY (id_client) REFERENCES client(id_client), FOREIGN KEY (id_them) REFERENCES them(id_them));
+
+CREATE TABLE them(id_them int AUTO_INCREMENT PRIMARY KEY NOT NULL, name varchar(255), description text)
+
+CREATE TABLE tag(id_tag int AUTO_INCREMENT PRIMARY KEY NOT NULL, name varchar(550));
+
+CREATE TABLE comment(id_comment INT AUTO_INCREMENT PRIMARY KEY NOT NULL, content longtext, date_create DATE, id_client int, id_article int, FOREIGN KEY (id_client) REFERENCES client(id_client), FOREIGN KEY (id_article) REFERENCES article(id_article));
+
+CREATE TABLE favorite(id_favorite int AUTO_INCREMENT PRIMARY KEY, id_client int, id_article int, FOREIGN KEY (id_article) REFERENCES article(id_article),FOREIGN KEY (id_client) REFERENCES client(id_client))
+
+CREATE TABLE tag_article(id_assoc int AUTO_INCREMENT PRIMARY KEY NOT NULL, id_article int, id_tag int, FOREIGN KEY (id_article) REFERENCES article(id_article), FOREIGN KEY (id_tag) REFERENCES tag(id_tag))
+
+ALTER TABLE article
+ADD CONSTRAINT them FOREIGN KEY (id_them) REFERENCES them(id_them)
+    ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE article
+ADD CONSTRAINT client FOREIGN KEY (id_client) REFERENCES client(id_client)
+    ON DELETE CASCADE ON UPDATE CASCADE;

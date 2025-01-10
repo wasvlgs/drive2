@@ -24,21 +24,24 @@
             }
         }
         public function addVehicle($Name,$modele,$categorie,$price,$type,$img){
-            $addVehicle = $this->database->prepare("INSERT INTO vehicule(name,modele,prix,disponibilite,id_categorie,imgSrc)
-             VALUES(:name,:modele,:prix,:disponibilite,:idcategorie,:imgSrc)
-            ");
-            $addVehicle->bindParam(":name",$Name);
-            $addVehicle->bindParam(":modele",$modele);
-            $addVehicle->bindParam(":prix",$price);
-            $addVehicle->bindParam(":disponibilite",$type);
-            $addVehicle->bindParam(":idcategorie",$categorie);
-            $addVehicle->bindParam(":imgSrc",$img['name']);
+            for($i = 0; $i < count($Name); $i++){
+                
+                $addVehicle = $this->database->prepare("INSERT INTO vehicule(name,modele,prix,disponibilite,id_categorie,imgSrc)
+                VALUES(:name,:modele,:prix,:disponibilite,:idcategorie,:imgSrc)
+                ");
+                $addVehicle->bindParam(":name",$Name[$i]);
+                $addVehicle->bindParam(":modele",$modele[$i]);
+                $addVehicle->bindParam(":prix",$price[$i]);
+                $addVehicle->bindParam(":disponibilite",$type[$i]);
+                $addVehicle->bindParam(":idcategorie",$categorie[$i]);
+                $addVehicle->bindParam(":imgSrc",$img['name'][$i]);
 
-            if(move_uploaded_file($img['tmp_name'], '../img/imgPages/'.$img['name']) && $addVehicle->execute()){
-                echo '<script>location.replace("vehicules.php")</script>';
-            }else{
-                echo '<script>alert("Faild to add vehicle")</script>';
+                if(move_uploaded_file($img['tmp_name'][$i], '../img/imgPages/'.$img['name'][$i])){
+                    $addVehicle->execute();
+                }
             }
+            echo '<script>location.replace("vehicules.php")</script>';
+            
         }
 
         public function showVehicle(){

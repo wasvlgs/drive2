@@ -37,7 +37,7 @@
                     <?php 
                         $getOffset;
                         if(isset($_GET['page']) && !empty(trim($_GET['page']))){
-                            $getOffset = htmlspecialchars(trim($_GET['page']));
+                            $getOffset = htmlspecialchars(trim($_GET['page'] - 1));
                         }else{
                             $getOffset = 0;
                         }
@@ -86,7 +86,7 @@
                                     </li>';
                                         }
 
-                                        if($_GET['page'] == 1){
+                                        if($_GET['page'] == 1 && $data['totalPages'] > 1){
                                             echo '<li>
                                         <a href="explore.php?page='.($_GET['page'] + 1).'" class="flex items-center justify-center px-4 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-blue-600 hover:text-white transition duration-300">
                                             Next →

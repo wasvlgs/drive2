@@ -33,7 +33,7 @@
             <h1 class="text-3xl font-bold text-blue-600">Drive & Loc</h1>
             <nav class="hidden md:flex space-x-6">
                 <a href="#home" class="text-gray-700 hover:text-blue-600 transition">Home</a>
-                <a href="pages/explore.php" class="text-gray-700 hover:text-blue-600 transition">Explore</a>
+                <a href="social/blog.php" class="text-gray-700 hover:text-blue-600 transition">Blog</a>
                 <a href="#features" class="text-gray-700 hover:text-blue-600 transition">Features</a>
                 <a href="#contact" class="text-gray-700 hover:text-blue-600 transition">Contact</a>
             </nav>
@@ -46,7 +46,7 @@
         <div class="text-center">
             <h1 class="text-6xl font-extrabold mb-6 animate-fade-in">Your Ride, Your Way</h1>
             <p class="text-lg mb-8 max-w-2xl mx-auto">Discover the best cars tailored to your needs. Book effortlessly and enjoy exceptional service.</p>
-            <a href="#explore" class="bg-blue-600 hover:bg-blue-700 text-white py-4 px-8 rounded-lg text-lg font-semibold transition">Explore Now</a>
+            <a href="pages/explore.php" class="bg-blue-600 hover:bg-blue-700 text-white py-4 px-8 rounded-lg text-lg font-semibold transition">Explore Now</a>
         </div>
     </section>
 
